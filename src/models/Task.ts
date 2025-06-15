@@ -5,7 +5,6 @@ export abstract class Task {
     name: string;
     isComplete: boolean;
     strategy: TaskStrategy | null;
-
     private statusCallback: ((message: string) => void) | null = null;
 
     protected constructor(name: string, strategy: TaskStrategy | null = null) {
@@ -29,5 +28,5 @@ export abstract class Task {
         this.updateStatus(`Task "${this.name}" has been marked as complete.`);
     }
 
-    abstract execute(): void;
+    abstract execute(): Promise<void>;
 }

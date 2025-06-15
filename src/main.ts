@@ -20,7 +20,7 @@ class App {
         }
     }
 
-    run(): void {
+    async run(): Promise<void> {
         const devTask = TaskFactory.createTask('Frontend Development', 'development');
         devTask.setStatusCallback((msg) => this.updateLogs(msg));
 
@@ -30,9 +30,9 @@ class App {
         const designTask = TaskFactory.createTask('Design', 'design');
         designTask.setStatusCallback((msg) => this.updateLogs(msg));
 
-        devTask.execute();
-        testTask.execute();
-        designTask.execute();
+        await devTask.execute();
+        await testTask.execute();
+        await designTask.execute();
     }
 }
 

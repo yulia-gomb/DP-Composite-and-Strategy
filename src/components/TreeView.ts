@@ -3,43 +3,56 @@ import { CompositeTask } from "../models/CompositeTask.ts";
 
 export class TreeView {
     private container: HTMLElement;
-    private readonly onTaskComplete: (task: Task) => void;
 
-    constructor(containerId: string, onTaskComplete: (task: Task) => void) {
+    constructor(containerId: string) {
         const container = document.getElementById(containerId);
         if (!container) {
             throw new Error(`Container with id "${containerId}" not found.`);
         }
         this.container = container;
-        this.onTaskComplete = onTaskComplete;
     }
 
-    renderTree(task: Task, level: number = 0): void {
-        const taskElement = document.createElement('div');
+    renderTable(task: Task, level: number = 0): void {
+        const row = document.createElement('tr');
 
-        taskElement.style.marginLeft = `${level * 20}px`;
-        taskElement.style.padding = '5px';
-        taskElement.style.cursor = 'pointer';
+        // First column: tasks
+        const nameCell = document.createElement('td');
+        nameCell.style.paddingLeft = `${level * 20}px`; // Indent based on level
+        nameCell.textContent = task.name;
+        row.appendChild(nameCell);
 
-        // Style tasks differently based on type
         if (task instanceof CompositeTask) {
-            taskElement.style.fontWeight = 'bold'; // Bold for composite tasks
-            taskElement.textContent = `📁 ${task.name} ${task.isComplete ? '✔️' : ''}`;
+            nameCell.textContent = `📁 ${task.name}`;
         } else {
-            taskElement.style.color = '#555'; // Different color for simple tasks
-            taskElement.textContent = `📄 ${task.name} ${task.isComplete ? '✔️' : ''}`;
+            nameCell.textContent = `📄 ${task.name}`;
         }
+        row.appendChild(nameCell);
 
-        taskElement.addEventListener('click', () => {
-            if (!task.isComplete) {
-                this.onTaskComplete(task);
-            }
-        });
+        // Second column: status
+        const statusCell = document.createElement('td');
+        statusCell.textContent = task.status === 'Not Started' ? ('Not Started: '+ task.strategy?.constructor.name) || 'No Strategy' : task.status;
+        row.appendChild(statusCell);
 
-        this.container.appendChild(taskElement);
+        // Attach row to the table body
+        const tableBody = this.container.querySelector('tbody');
+        if (!tableBody) {
+            throw new Error('Table body not found.');
+        }
+        tableBody.appendChild(row);
 
+        // Recursively render subtasks
         if (task instanceof CompositeTask && task.subTasks.length > 0) {
-            task.subTasks.forEach(subTask => this.renderTree(subTask, level + 1));
+            task.subTasks.forEach(subTask => this.renderTable(subTask, level + 1));
+        }
+    }
+
+    // Re-render the entire table
+    render(task: CompositeTask): void {
+        // Clear the table
+        const tableBody = this.container.querySelector('tbody');
+        if (tableBody) {
+            tableBody.innerHTML = '';
+            this.renderTable(task);
         }
     }
 }

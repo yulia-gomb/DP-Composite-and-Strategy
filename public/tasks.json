@@ -1,0 +1,64 @@
+{
+  "name": "Create a Website",
+  "tasks": [
+    {
+      "name": "Development",
+      "type": "development",
+      "subTasks": [
+        {
+          "name": "Frontend Development",
+          "type": "development",
+          "subTasks": [
+            {
+              "name": "UI Components",
+              "type": "development",
+              "subTasks": []
+            },
+            {
+              "name": "API Integration",
+              "type": "development",
+              "subTasks": []
+            }
+          ]
+        },
+        {
+          "name": "Backend Development",
+          "type": "development",
+          "subTasks": []
+        }
+      ]
+    },
+    {
+      "name": "Testing",
+      "type": "testing",
+      "subTasks": [
+        {
+          "name": "Write Unit Tests",
+          "type": "testing",
+          "subTasks": []
+        },
+        {
+          "name": "Perform Integration Tests",
+          "type": "testing",
+          "subTasks": []
+        }
+      ]
+    },
+    {
+      "name": "Design",
+      "type": "design",
+      "subTasks": [
+        {
+          "name": "Create Wireframes",
+          "type": "design",
+          "subTasks": []
+        },
+        {
+          "name": "Finalize UI",
+          "type": "design",
+          "subTasks": []
+        }
+      ]
+    }
+  ]
+}

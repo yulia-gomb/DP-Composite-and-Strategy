@@ -12,27 +12,25 @@ export class CompositeTask extends Task {
 
     addSubTask(task: Task): void {
         this.subTasks.push(task);
-        console.log(`Subtask "${task.name}" added to "${this.name}".`);
     }
 
     removeSubTask(taskName: string): void {
         this.subTasks = this.subTasks.filter(task => task.name !== taskName);
-        console.log(`Subtask "${taskName}" removed from "${this.name}".`);
     }
 
-    execute(): void {
-        console.log(`Executing composite task: "${this.name}"`);
+    async execute(): Promise<void> {
+        this.updateStatus(`Composite task "${this.name}" execution started.`);
 
-        // Execute all subtasks
+        // Execute all subtasks with delays
         for (const task of this.subTasks) {
             if (!task.isComplete) {
-                task.execute();
+                await task.execute(); // Wait for each subtask to finish
             }
         }
 
-        // Optionally execute the composite itself if it has a strategy
+        // Execute the composite's own logic, if it has a strategy
         if (this.strategy) {
-            this.strategy.execute(this);
+            await this.strategy.execute(this);
         }
 
         this.markComplete();

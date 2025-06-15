@@ -11,26 +11,24 @@ export async function loadProjectFromJson(url: string): Promise<CompositeTask> {
 
     const data = await response.json();
 
-    // Create the root CompositeTask for the project
     const project = new CompositeTask(data.name);
 
-    // Parse the tasks recursively
     const parseTasks = (tasks: any[]): Task[] => {
         return tasks.map(taskJson => {
-            const task = TaskFactory.createTask(taskJson.name, taskJson.type);
 
-            if (taskJson.subTasks && taskJson.subTasks.length > 0) {
-                const subTasks = parseTasks(taskJson.subTasks);
-                if (task instanceof CompositeTask) {
-                    subTasks.forEach(subTask => task.addSubTask(subTask));
-                }
+            const hasSubTasks = taskJson.subTasks && taskJson.subTasks.length > 0;
+
+            const task = TaskFactory.createTask(taskJson.name, taskJson.type, hasSubTasks);
+
+            if (hasSubTasks && task instanceof CompositeTask) {
+                const subTasks = parseTasks(taskJson.subTasks); // Recursive call
+                subTasks.forEach(subTask => task.addSubTask(subTask)); // Attach subtasks
             }
 
             return task;
         });
     };
 
-    // Parse top-level tasks and attach them to the project
     const projectTasks = parseTasks(data.tasks);
     projectTasks.forEach(task => project.addSubTask(task));
 

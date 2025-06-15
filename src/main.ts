@@ -1,7 +1,9 @@
-import {TaskFactory} from "./models/TaskFactory.ts";
+import type { CompositeTask } from "./models/CompositeTask.ts";
+import { loadProjectFromJson } from "./services/TaskLoader.ts";
 
 class App {
-    private taskLogs: string[] = []; // Array to store task execution logs
+    private project: CompositeTask | null = null;
+    private taskLogs: string[] = [];
 
     private updateLogs(message: string): void {
         this.taskLogs.push(message);
@@ -11,7 +13,7 @@ class App {
     private renderLogs(): void {
         const logContainer = document.getElementById('logs');
         if (logContainer) {
-            logContainer.innerHTML = ''; // Clear previous logs
+            logContainer.innerHTML = '';
             this.taskLogs.forEach(log => {
                 const logItem = document.createElement('div');
                 logItem.textContent = log;
@@ -20,21 +22,25 @@ class App {
         }
     }
 
-    async run(): Promise<void> {
-        const devTask = TaskFactory.createTask('Frontend Development', 'development');
-        devTask.setStatusCallback((msg) => this.updateLogs(msg));
+    async initialize(): Promise<void> {
+        this.project = await loadProjectFromJson('/tasks.json');
 
-        const testTask = TaskFactory.createTask('Unit Testing', 'testing');
-        testTask.setStatusCallback((msg) => this.updateLogs(msg));
+        if (this.project) {
+            this.project.setStatusCallback((msg) => this.updateLogs(msg));
+            console.log(`Project "${this.project.name}" loaded successfully.`);
+        }
+    }
 
-        const designTask = TaskFactory.createTask('Design', 'design');
-        designTask.setStatusCallback((msg) => this.updateLogs(msg));
-
-        await devTask.execute();
-        await testTask.execute();
-        await designTask.execute();
+    async execute(): Promise<void> {
+        if (this.project) {
+            await this.project.execute();
+        }
     }
 }
 
 const app = new App();
-app.run();
+
+(async () => {
+    await app.initialize();
+    await app.execute();
+})();

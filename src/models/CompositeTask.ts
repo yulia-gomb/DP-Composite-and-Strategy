@@ -3,7 +3,7 @@ import type { TaskStrategy } from "./TaskStrategy.ts";
 
 
 export class CompositeTask extends Task {
-    private subTasks: Task[];
+    subTasks: Task[];
 
     constructor(name: string, strategy: TaskStrategy | null = null) {
         super(name, strategy);
@@ -12,10 +12,6 @@ export class CompositeTask extends Task {
 
     addSubTask(task: Task): void {
         this.subTasks.push(task);
-    }
-
-    removeSubTask(taskName: string): void {
-        this.subTasks = this.subTasks.filter(task => task.name !== taskName);
     }
 
     async execute(): Promise<void> {

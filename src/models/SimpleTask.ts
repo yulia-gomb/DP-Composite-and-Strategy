@@ -7,7 +7,7 @@ export class SimpleTask extends Task {
         super(name, strategy);
     }
 
-    execute(): void {
+    async execute(): Promise<void> {
         console.log(`Executing simple task: "${this.name}"`);
         if (this.strategy) {
             this.strategy.execute(this);

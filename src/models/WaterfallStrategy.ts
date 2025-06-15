@@ -12,8 +12,8 @@ export class WaterfallStrategy implements TaskStrategy {
 
         for (const step of steps) {
             await delay(1000);
-            task.updateStatus(`Step "${step}" for task: "${task.name}" completed`);
-            console.log(`Step "${step}" for task: "${task.name}" completed`);
+            task.updateStatus(`WATERFALL: Step "${step}" for task: "${task.name}" completed`);
+            console.log(`WATERFALL: Step "${step}" for task: "${task.name}" completed`);
         }
 
         task.updateStatus(`WATERFALL execution FINISHED for task: "${task.name}"`);

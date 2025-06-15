@@ -2,37 +2,40 @@ import type { TaskStrategy } from './TaskStrategy';
 
 
 export abstract class Task {
-    name: string; // Task name
-    isComplete: boolean; // Task completion status
-    strategy: TaskStrategy | null; // Execution strategy for the task
-    status: string; // Current status of the task ("Not Started", "In Progress", "Completed")
-    private statusCallback: ((message: string) => void) | null = null; // Callback for status updates
+    name: string;
+    isComplete: boolean;
+    strategy: TaskStrategy | null;
+    status: string;
+    private statusCallback: ((task: Task) => void) | null = null;
 
-    constructor(name: string, strategy: TaskStrategy | null = null) {
+    protected constructor(name: string, strategy: TaskStrategy | null = null) {
         this.name = name;
-        this.isComplete = false; // Task starts as incomplete
+        this.isComplete = false;
         this.strategy = strategy;
-        this.status = 'Not Started'; // Default status
+        this.status = 'Not Started';
     }
 
-    setStatusCallback(callback: (message: string) => void): void {
+    // Assign a callback to notify status updates in the UI
+    setStatusCallback(callback: (task: Task) => void): void {
         this.statusCallback = callback;
     }
 
-    updateStatus(message: string): void {
+    // Update the current status and trigger the callback
+    updateStatus(newStatus: string): void {
+        this.status = newStatus;
         if (this.statusCallback) {
-            this.statusCallback(message);
+            this.statusCallback(this);
         }
     }
 
+    // Set a new status for the task
     setStatus(newStatus: string): void {
-        this.status = newStatus;
-        this.updateStatus(`Task "${this.name}" status updated to: ${newStatus}`);
+        this.updateStatus(newStatus);
     }
 
+    // Mark the task as completed
     markComplete(): void {
         this.isComplete = true;
-        this.setStatus('Completed');
     }
 
     abstract execute(): Promise<void>;

@@ -9,7 +9,7 @@ export class TaskFactory {
     static createTask(name: string, type: string, hasSubTasks: boolean): Task {
 
         if (hasSubTasks) {
-            return new CompositeTask(name); // Use CompositeTask if subtasks exist
+            return new CompositeTask(name);
         }
 
         switch (type) {

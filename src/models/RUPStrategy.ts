@@ -12,8 +12,8 @@ export class RUPStrategy implements TaskStrategy {
 
         for (const phase of phases) {
             await delay(1000);
-            task.updateStatus(`Phase "${phase}" for task: "${task.name}" completed`);
-            console.log(`Phase "${phase}" for task: "${task.name}" completed`);
+            task.updateStatus(`RUP: Phase "${phase}" for task: "${task.name}" completed`);
+            console.log(`RUP: Phase "${phase}" for task: "${task.name}" completed`);
         }
 
         task.updateStatus(`RUP execution FINISHED for task: "${task.name}"`);

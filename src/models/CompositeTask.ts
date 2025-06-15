@@ -15,20 +15,20 @@ export class CompositeTask extends Task {
     }
 
     async execute(): Promise<void> {
-        this.updateStatus(`Composite task "${this.name}" execution started.`);
+        this.updateStatus(`Composite task "${this.name}" execution STARTED.`);
 
         // Execute all subtasks with delays
         for (const task of this.subTasks) {
             if (!task.isComplete) {
-                await task.execute(); // Wait for each subtask to finish
+                await task.execute();
             }
         }
 
-        // Execute the composite's own logic, if it has a strategy
         if (this.strategy) {
-            await this.strategy.execute(this);
+            this.strategy.execute(this);
         }
 
+        this.updateStatus(`Composite task "${this.name}" execution FINISHED.`);
         this.markComplete();
     }
 }

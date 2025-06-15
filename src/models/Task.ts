@@ -6,24 +6,28 @@ export abstract class Task {
     isComplete: boolean;
     strategy: TaskStrategy | null;
 
+    private statusCallback: ((message: string) => void) | null = null;
+
     protected constructor(name: string, strategy: TaskStrategy | null = null) {
         this.name = name;
         this.isComplete = false;
         this.strategy = strategy;
     }
 
+    setStatusCallback(callback: (message: string) => void): void {
+        this.statusCallback = callback;
+    }
+
+    updateStatus(message: string): void {
+        if (this.statusCallback) {
+            this.statusCallback(message);
+        }
+    }
+
     markComplete(): void {
         this.isComplete = true;
-        console.log(`Task "${this.name}" is now marked as completed.`);
+        this.updateStatus(`Task "${this.name}" has been marked as complete.`);
     }
 
     abstract execute(): void;
-
-    addSubTask(task: Task): void {
-        throw new Error(`Cannot add subtasks to a simple task: "${task.name}"`);
-    }
-
-    removeSubTask(taskName: string): void {
-        throw new Error(`Cannot remove subtasks from a simple task: "${taskName}"`);
-    }
 }

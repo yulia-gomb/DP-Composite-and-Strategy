@@ -7,11 +7,23 @@
     <title>Vite + TS</title>
   </head>
   <body>
-    <div id="app"></div>
-    <h1>Task Execution Logs</h1>
-    <div id="logs" style="border: 1px solid #ccc; padding: 1em; max-width: 600px; height: 900px; overflow-y: auto;">
-      <!-- Logs will be appended here -->
-    </div>
+  <h1>Task Tree Viewer</h1>
+
+  <!-- Tree -->
+  <h1>Tasks</h1>
+  <div id="tree" style="border: 1px solid #ccc; padding: 1em; max-width: 600px; min-height: 300px; overflow-y: auto;">
+    <!-- Task tree will be rendered here -->
+  </div>
+
+  <!-- Logs -->
+  <h1>Logs</h1>
+  <div id="logs" style="border: 1px solid #ccc; padding: 1em; max-width: 600px; height: 100px; overflow-y: auto; margin-top: 20px;">
+    <!-- Logs will be appended here -->
+  </div>
+
+  <!-- Action button -->
+  <button id="startButton" style="margin-top: 20px;">Start Execution</button>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
